@@ -8,13 +8,12 @@ export class Searchbar extends Component {
 
   handleChange = e => {
     this.setState({ value: e.target.value });
-    // console.log(this.state.value);
   };
 
   handleSubmit = e => {
     e.preventDefault();
     this.props.getFormValue(this.state.value);
-    // console.log(this.props);
+    this.setState({ value: '' });
   };
 
   render() {
