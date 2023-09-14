@@ -1,20 +1,19 @@
+import { Item } from './imageGalleryItem.styled';
+
 export const ImageGalleryItem = ({ imageData }) => {
-  const { hits } = imageData;
-  console.log(hits);
   return (
-    <div>
-      {hits && hits.length > 0 ? (
-        hits.map(hit => {
-          console.log(hit);
+    <>
+      {imageData && imageData.length > 0 ? (
+        imageData.map(item => {
           return (
-            <li key={hit.id}>
-              <img src={hit.previewURL} alt="" />
-            </li>
+            <Item key={item.id}>
+              <img src={item.previewURL} alt={item.tags} />
+            </Item>
           );
         })
       ) : (
-        <p>No hits found</p>
+        <li></li>
       )}
-    </div>
+    </>
   );
 };

@@ -24,10 +24,13 @@ export class Searchbar extends Component {
             value={this.state.value}
             onChange={this.handleChange}
             type="text"
+            autocomplete="off"
+            autofocus
+            placeholder="Search images and photos"
           />
-          <div>
-            <button></button>
-          </div>
+          <button>
+            <span>Search</span>
+          </button>
         </form>
       </FormWrapper>
     );
