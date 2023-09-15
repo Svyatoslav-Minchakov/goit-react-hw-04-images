@@ -27,6 +27,8 @@ export class ImageGallery extends Component {
       );
       const newImageData = response.data;
 
+      this.props.sendRenderResult(newImageData.hits);
+
       this.setState(prevState => ({
         imageData: [...prevState.imageData, ...newImageData.hits],
       }));

@@ -7,6 +7,14 @@ export class App extends Component {
   state = {
     value: '',
     pageNumber: 1,
+    renderResult: [],
+    modalIsOpen: false,
+  };
+
+  getRenderResult = value => {
+    this.setState({ renderResult: [...value] }, () => {
+      console.log(this.state);
+    });
   };
 
   getFormValue = value => {
@@ -30,11 +38,14 @@ export class App extends Component {
         <Searchbar getFormValue={this.getFormValue} />
 
         <ImageGallery
+          sendRenderResult={this.getRenderResult}
           pageNumber={this.state.pageNumber}
           inputValue={this.state.value}
         />
 
-        <Button changesPageNumber={this.changesPageNumber} />
+        {this.state.renderResult.length > 0 && (
+          <Button changesPageNumber={this.changesPageNumber} />
+        )}
       </>
     );
   }
