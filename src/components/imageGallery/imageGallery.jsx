@@ -2,10 +2,12 @@ import { Component } from 'react';
 import axios from 'axios';
 import { ImageGalleryItem } from 'components/imageGalleryItem/imageGalleryItem';
 import { List } from './imageGallery.styled';
+import Loader from 'components/loader/loader';
 
 export class ImageGallery extends Component {
   state = {
     imageData: [],
+    isLoading: false,
   };
 
   BASE_URL = 'https://pixabay.com/api/';
@@ -22,6 +24,7 @@ export class ImageGallery extends Component {
 
   async getImageCollection() {
     try {
+      this.setState({ isLoading: true });
       const response = await axios.get(
         `${this.BASE_URL}?key=${this.API_KEY}&q=${this.props.inputValue}&image_type=photo&orientation=horizontal&page=${this.props.pageNumber}&per_page=12`
       );
@@ -34,14 +37,25 @@ export class ImageGallery extends Component {
       }));
     } catch (error) {
       console.error('Помилка при отриманні колекції зображень:', error);
+    } finally {
+      this.setState({ isLoading: false });
     }
   }
 
+  getImageUrl = e => {
+    const url = e.target.getAttribute('data-url');
+    this.props.getLargeImage(url);
+  };
+
   render() {
     return (
-      <List>
-        <ImageGalleryItem imageData={this.state.imageData} />
-      </List>
+      <>
+        {this.state.isLoading && <Loader />}
+
+        <List onClick={this.getImageUrl}>
+          <ImageGalleryItem imageData={this.state.imageData} />
+        </List>
+      </>
     );
   }
 }

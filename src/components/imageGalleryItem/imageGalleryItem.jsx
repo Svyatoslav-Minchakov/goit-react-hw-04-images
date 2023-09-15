@@ -7,7 +7,11 @@ export const ImageGalleryItem = ({ imageData }) => {
         imageData.map(item => {
           return (
             <Item key={item.id}>
-              <img src={item.previewURL} alt={item.tags} />
+              <img
+                data-url={item.webformatURL}
+                src={item.previewURL}
+                alt={item.tags}
+              />
             </Item>
           );
         })

@@ -1,14 +1,16 @@
-import { Component } from 'react';
+import { Children, Component } from 'react';
 import { Searchbar } from './searchbar/searchbar';
 import { ImageGallery } from './imageGallery/imageGallery';
 import { Button } from './button/button';
+import ModalWindow from './modal/modal';
+import Loader from './loader/loader';
 
 export class App extends Component {
   state = {
     value: '',
     pageNumber: 1,
     renderResult: [],
-    modalIsOpen: false,
+    currentImage: '',
   };
 
   getRenderResult = value => {
@@ -32,12 +34,19 @@ export class App extends Component {
     );
   };
 
+  getLargeImage = data => {
+    this.setState({ currentImage: `${data}` }, () => {
+      console.log(this.state);
+    });
+  };
+
   render() {
     return (
       <>
         <Searchbar getFormValue={this.getFormValue} />
 
         <ImageGallery
+          getLargeImage={this.getLargeImage}
           sendRenderResult={this.getRenderResult}
           pageNumber={this.state.pageNumber}
           inputValue={this.state.value}
@@ -46,6 +55,11 @@ export class App extends Component {
         {this.state.renderResult.length > 0 && (
           <Button changesPageNumber={this.changesPageNumber} />
         )}
+
+        <ModalWindow
+          currentImage={this.state.currentImage}
+          dataArray={this.state.renderResult}
+        />
       </>
     );
   }
