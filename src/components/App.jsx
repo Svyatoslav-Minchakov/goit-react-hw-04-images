@@ -1,9 +1,8 @@
-import { Children, Component } from 'react';
+import { Component } from 'react';
 import { Searchbar } from './searchbar/searchbar';
 import { ImageGallery } from './imageGallery/imageGallery';
 import { Button } from './button/button';
 import ModalWindow from './modal/modal';
-import Loader from './loader/loader';
 
 export class App extends Component {
   state = {
