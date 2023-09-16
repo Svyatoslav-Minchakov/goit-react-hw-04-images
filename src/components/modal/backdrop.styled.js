@@ -12,5 +12,31 @@ export const Backdrop = styled('div')(() => {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+
+    '& .modal-vrapper': {
+      position: 'relative',
+      padding: 50,
+    },
+
+    '& button': {
+      backgroundColor: 'transparent',
+      position: 'absolute',
+      color: 'white',
+      border: 'none',
+      top: 0,
+      right: 0,
+      width: 40,
+      height: 40,
+      fontSize: 42,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer',
+
+      '&:hover': {
+        color: 'teal',
+        borderColor: 'teal',
+      },
+    },
   };
 });

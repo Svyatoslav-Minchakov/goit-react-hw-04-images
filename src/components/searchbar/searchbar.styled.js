@@ -31,10 +31,9 @@ export const FormWrapper = styled.section`
 
   & button {
     display: inline-block;
-    width: 48px;
+    width: 68px;
     height: 48px;
     border: 0;
-    /* background-image: url('https://image.flaticon.com/icons/svg/149/149852.svg'); */
     background-size: 40%;
     background-repeat: no-repeat;
     background-position: center;

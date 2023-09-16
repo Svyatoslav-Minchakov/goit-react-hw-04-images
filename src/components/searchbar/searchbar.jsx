@@ -24,8 +24,8 @@ export class Searchbar extends Component {
             value={this.state.value}
             onChange={this.handleChange}
             type="text"
-            autocomplete="off"
-            autofocus
+            autoComplete="off"
+            autoFocus
             placeholder="Search images and photos"
           />
           <button>

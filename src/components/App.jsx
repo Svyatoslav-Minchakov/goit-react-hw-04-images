@@ -13,13 +13,14 @@ export class App extends Component {
   };
 
   getRenderResult = value => {
-    this.setState({ renderResult: [...value] }, () => {
-      console.log(this.state);
-    });
+    this.setState({ renderResult: [...value] }, () => {});
   };
 
   getFormValue = value => {
     this.setState({ value });
+    if (value !== '' && value !== this.state.value) {
+      this.setState({ pageNumber: 1 });
+    }
   };
 
   changesPageNumber = () => {
@@ -51,7 +52,7 @@ export class App extends Component {
           inputValue={this.state.value}
         />
 
-        {this.state.renderResult.length > 0 && (
+        {this.state.renderResult.length > 11 && (
           <Button changesPageNumber={this.changesPageNumber} />
         )}
 

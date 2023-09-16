@@ -30,10 +30,12 @@ class ModalWindow extends Component {
       <>
         {this.state.isOpen && (
           <Backdrop>
-            <Modal>
-              <img src={this.props.currentImage} alt="" />
+            <div className="modal-vrapper">
+              <Modal>
+                <img src={this.props.currentImage} alt="" />
+              </Modal>
               <button onClick={this.toggleModal}>x</button>
-            </Modal>
+            </div>
           </Backdrop>
         )}
       </>

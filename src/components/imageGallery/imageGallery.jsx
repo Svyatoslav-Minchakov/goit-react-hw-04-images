@@ -14,10 +14,11 @@ export class ImageGallery extends Component {
   API_KEY = '35528535-2026f3bafef7be5a50534f79c';
 
   componentDidUpdate(prevProps) {
-    if (
-      prevProps.inputValue !== this.props.inputValue ||
-      prevProps.pageNumber !== this.props.pageNumber
-    ) {
+    if (prevProps.inputValue !== this.props.inputValue) {
+      this.setState({ imageData: [], isLoading: true }, () => {
+        this.getImageCollection();
+      });
+    } else if (prevProps.pageNumber !== this.props.pageNumber) {
       this.getImageCollection();
     }
   }
@@ -35,8 +36,13 @@ export class ImageGallery extends Component {
       this.setState(prevState => ({
         imageData: [...prevState.imageData, ...newImageData.hits],
       }));
+
+      if (newImageData.hits.length === 0) {
+        this.setState({ isLoading: false });
+        alert('Nothing has been found.');
+      }
     } catch (error) {
-      console.error('Помилка при отриманні колекції зображень:', error);
+      console.error('error:', error);
     } finally {
       this.setState({ isLoading: false });
     }
