@@ -1,23 +1,18 @@
 import { Item } from './imageGalleryItem.styled';
 
-export const ImageGalleryItem = ({ imageData }) => {
+export const ImageGalleryItem = ({
+  id,
+  smallUrl,
+  tags,
+  onClickImageItem,
+  largeImage,
+}) => {
+  const onImageClick = () => {
+    onClickImageItem({ src: largeImage, alt: tags });
+  };
   return (
-    <>
-      {imageData && imageData.length > 0 ? (
-        imageData.map(item => {
-          return (
-            <Item key={item.id}>
-              <img
-                data-url={item.webformatURL}
-                src={item.previewURL}
-                alt={item.tags}
-              />
-            </Item>
-          );
-        })
-      ) : (
-        <li></li>
-      )}
-    </>
+    <Item key={id} data-id={id} onClick={onImageClick}>
+      <img src={smallUrl} alt={tags} />
+    </Item>
   );
 };

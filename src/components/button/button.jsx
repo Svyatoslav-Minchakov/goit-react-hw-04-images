@@ -1,9 +1,11 @@
 import { ShowMore } from './button.styled';
 
-export const Button = props => {
-  const renderImages = () => {
-    props.changesPageNumber();
-  };
-
-  return <ShowMore onClick={renderImages}>Load More</ShowMore>;
+export const Button = ({ onClickRender }) => {
+  return (
+    <div>
+      <ShowMore type="button" onClick={onClickRender}>
+        Load more
+      </ShowMore>
+    </div>
+  );
 };

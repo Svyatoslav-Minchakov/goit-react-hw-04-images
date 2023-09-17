@@ -6,29 +6,39 @@ export class Searchbar extends Component {
     value: '',
   };
 
-  handleChange = e => {
-    this.setState({ value: e.target.value });
+  handleChange = ({ target: { value } }) => {
+    this.setState({ value });
   };
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.getFormValue(this.state.value);
-    this.setState({ value: '' });
+    if (this.state.value.trim() === '') {
+      alert('Введіть свій запит, будь ласка!');
+      return;
+    }
+    this.props.onSubmit(this.state.value);
+    this.reset();
   };
 
+  reset = () =>
+    this.setState({
+      value: '',
+    });
+
   render() {
+    const { value } = this.state;
     return (
       <FormWrapper>
         <form onSubmit={this.handleSubmit}>
           <input
-            value={this.state.value}
-            onChange={this.handleChange}
             type="text"
+            onChange={this.handleChange}
+            value={value}
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
           />
-          <button>
+          <button type="submit">
             <span>Search</span>
           </button>
         </form>
@@ -36,3 +46,39 @@ export class Searchbar extends Component {
     );
   }
 }
+
+// export class Searchbar extends Component {
+//   state = {
+//     value: '',
+//   };
+
+//   handleChange = e => {
+//     this.setState({ value: e.target.value });
+//   };
+
+//   handleSubmit = e => {
+//     e.preventDefault();
+//     this.props.getFormValue(this.state.value);
+//     this.setState({ value: '' });
+//   };
+
+//   render() {
+//     return (
+//       <FormWrapper>
+//         <form onSubmit={this.handleSubmit}>
+//           <input
+//             value={this.state.value}
+//             onChange={this.handleChange}
+//             type="text"
+//             autoComplete="off"
+//             autoFocus
+//             placeholder="Search images and photos"
+//           />
+//           <button>
+//             <span>Search</span>
+//           </button>
+//         </form>
+//       </FormWrapper>
+//     );
+//   }
+// }
