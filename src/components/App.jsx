@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Searchbar } from './searchbar/searchbar';
 import { searchPhoto } from 'services/api';
 import Loader from './loader/loader';
@@ -6,105 +6,94 @@ import { ImageGalery } from './imageGallery/imageGallery';
 import { Button } from './button/button';
 import ModalWindow from './modal/modal';
 
-export class App extends Component {
-  state = {
-    isloading: false,
-    photos: [],
-    photoName: '',
-    page: 1,
-    btnLoadMore: false,
-    selectedPhoto: null,
-  };
+export const App = () => {
+  const [isLoading, setisLoading] = useState(false);
+  const [photos, setPhotos] = useState([]);
+  const [photoName, setPhotoName] = useState('');
+  const [page, setPage] = useState(1);
+  const [btnLoadMore, setBtnLoadMore] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
 
-  getSelectedPhoto = e => {
-    console.log(e);
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      if (photoName === '') return;
 
-  componentDidUpdate(_, prevState) {
-    const { photoName, page } = this.state;
-    if (photoName !== prevState.photoName || page !== prevState.page) {
-      this.setState({ isloading: true });
+      setisLoading(true);
 
-      searchPhoto(photoName, page)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(response.status);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (data.totalHits === 0) {
-            alert('Oops! It has been wrong!');
-            return;
-          }
-          const totalPage = Math.ceil(data.totalHits / 12);
+      try {
+        const response = await searchPhoto(photoName, page);
 
-          if (totalPage > page) {
-            this.setState({ btnLoadMore: true });
-          } else {
-            alert('This is the end!');
-            this.setState({ btnLoadMore: false });
-          }
-          const arrPhotos = data.hits.map(
-            ({ id, webformatURL, largeImageURL, tags }) => ({
-              id,
-              webformatURL,
-              largeImageURL,
-              tags,
-            })
-          );
+        if (!response.ok) {
+          throw new Error(response.status);
+        }
 
-          this.setState(prevState => ({
-            photos: [...prevState.photos, ...arrPhotos],
-          }));
-        })
-        .catch(error => {
-          console.log(error);
-          return alert('Oops! It has been wrong!');
-        })
-        .finally(() => {
-          this.setState({ isloading: false });
-        });
-    }
-  }
+        const data = await response.json();
 
-  onSubmitForm = value => {
-    if (value === this.state.photoName) {
+        if (data.totalHits === 0) {
+          alert('Oops! It has been wrong!');
+          return;
+        }
+
+        const totalPage = Math.ceil(data.totalHits / 12);
+
+        if (totalPage > page) {
+          setBtnLoadMore(true);
+        } else {
+          alert('This is the end!');
+          setBtnLoadMore(false);
+        }
+
+        const arrPhotos = data.hits.map(
+          ({ id, webformatURL, largeImageURL, tags }) => ({
+            id,
+            webformatURL,
+            largeImageURL,
+            tags,
+          })
+        );
+
+        setPhotos(prevPhotos => [...prevPhotos, ...arrPhotos]);
+      } catch (error) {
+        console.log(error);
+        alert('Oops! It has been wrong!');
+      } finally {
+        setisLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [photoName, page]);
+
+  const onSubmitForm = value => {
+    if (value === photoName) {
       alert('Please enter a new request!');
       return;
     }
-    this.setState({
-      photoName: value,
-      page: 1,
-      photos: [],
-      btnLoadMore: false,
-    });
+    setPhotoName(value);
+    setPage(1);
+    setPhotos([]);
+    setBtnLoadMore(false);
   };
 
-  onClickRender = () => {
-    this.setState(prev => ({ page: prev.page + 1 }));
+  const onClickRender = () => {
+    setPage(prevPage => prevPage + 1);
   };
 
-  toggleModal = (selectedPhoto = null) => {
-    this.setState({ selectedPhoto });
+  const toggleModal = (selectedPhoto = null) => {
+    setSelectedPhoto(selectedPhoto);
   };
-  render() {
-    const { isloading, photos, btnLoadMore, selectedPhoto } = this.state;
-    return (
-      <div>
-        <Searchbar onSubmit={this.onSubmitForm} />
-        {isloading && <Loader />}
-        <ImageGalery photos={photos} onClickImageItem={this.toggleModal} />
-        {photos.length !== 0 && btnLoadMore && (
-          <Button onClickRender={this.onClickRender} />
-        )}
-        {selectedPhoto && (
-          <ModalWindow
-            selectedPhoto={selectedPhoto}
-            onClose={this.toggleModal}
-          />
-        )}
-      </div>
-    );
-  }
-}
+
+  return (
+    <div>
+      <Searchbar onSubmit={onSubmitForm} />
+      {isLoading && <Loader />}
+      <ImageGalery photos={photos} onClickImageItem={toggleModal} />
+      {photos.length !== 0 && btnLoadMore && (
+        <Button onClickRender={onClickRender} />
+      )}
+      {selectedPhoto && (
+        <ModalWindow selectedPhoto={selectedPhoto} onClose={toggleModal} />
+      )}
+    </div>
+  );
+};
