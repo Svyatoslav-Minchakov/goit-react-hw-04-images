@@ -5,23 +5,23 @@ import { Modal } from './modal.styled';
 
 const modalRoot = document.querySelector('#modal-root');
 
-export const ModalWindow = ({ onClose, selectedPhoto }) => {
+const ModalWindow = ({ onClose, selectedPhoto }) => {
   const { src, alt } = selectedPhoto;
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDawn);
-  }, []);
 
   useEffect(() => {
+    const handleKeyDawn = e => {
+      if (e.code === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDawn);
+
     return () => {
       window.removeEventListener('keydown', handleKeyDawn);
     };
-  }, []);
+  }, [onClose]);
 
-  const handleKeyDawn = e => {
-    if (e.code === 'Escape') {
-      onClose();
-    }
-  };
   const handleBackdropClick = e => {
     if (e.currentTarget === e.target) {
       onClose();
